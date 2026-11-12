@@ -36,7 +36,9 @@ class IndASCompanyDisclosure(BaseModel):
     reporting_date: date
     filing_date: date
     currency: str = Field(default="INR")
-    scale: int = Field(default=10_000_000, description="Default in Crores (1 Cr = 10M INR) or units")
+    scale: int = Field(
+        default=10_000_000, description="Default in Crores (1 Cr = 10M INR) or units"
+    )
     facts: dict[str, float]
 
 
@@ -53,7 +55,11 @@ class IndiaFilingsClient:
         "pbt": ["ProfitBeforeTax"],
         "tax": ["TaxExpense", "CurrentTax"],
         "pat": ["ProfitForThePeriod", "NetProfitLossAfterTax"],
-        "non_current_assets": ["PropertyPlantAndEquipment", "RightOfUseAssets", "CapitalWorkInProgress"],
+        "non_current_assets": [
+            "PropertyPlantAndEquipment",
+            "RightOfUseAssets",
+            "CapitalWorkInProgress",
+        ],
         "current_assets": ["Inventories", "TradeReceivables", "CashAndCashEquivalents"],
         "total_assets": ["TotalAssets"],
         "equity_capital": ["EquityShareCapital"],
@@ -165,7 +171,9 @@ class IndiaFilingsClient:
 
         # Generate CitationRefs for audited line items
         hasher = hashlib.sha256()
-        hasher.update(f"{disclosure.cin}:{disclosure.fiscal_year}:{disclosure.reporting_date}".encode())
+        hasher.update(
+            f"{disclosure.cin}:{disclosure.fiscal_year}:{disclosure.reporting_date}".encode()
+        )
         doc_hash = hasher.hexdigest()
 
         sourced_map: dict[str, SourcedValue] = {}
@@ -186,6 +194,8 @@ class IndiaFilingsClient:
                 xbrl_tag=f"mca-ind-as:{metric}",
                 raw_snippet=f"{val:,.0f} {disclosure.currency} (CIN: {disclosure.cin})",
             )
-            sourced_map[metric] = SourcedValue(value=val, unit=disclosure.currency, scale=1, citation=cit)
+            sourced_map[metric] = SourcedValue(
+                value=val, unit=disclosure.currency, scale=1, citation=cit
+            )
 
         return three_stmt, sourced_map

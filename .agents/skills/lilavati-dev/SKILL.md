@@ -26,7 +26,8 @@ When working on this repository, you are not writing a generic web application o
 
   class CitationRef(BaseModel):
       doc_hash: str = Field(..., description="SHA-256 hash of the source document")
-      filing_date: str = Field(..., description="ISO 8601 date of publication")
+      filing_date: date = Field(..., description="Date of publication")
+      period_end: date = Field(..., description="Fiscal period end date (Valid Time)")
       page: int = Field(..., ge=1, description="1-based page number")
       table_id: str | None = Field(None, description="Identifier of the extracted table")
       xbrl_tag: str | None = Field(None, description="Standard or extension XBRL taxonomy tag")
@@ -53,21 +54,39 @@ When working on this repository, you are not writing a generic web application o
 
 ---
 
-## 2. Directory Layout & Where to Place Code
+## 2. Directory Layout & Available Core Engines
 
-| Component | Target Directory | Description |
+| Component | Module Path | Implemented Capabilities |
 | :--- | :--- | :--- |
-| **Core Primitives** | `src/lilavati/core/` | Invariants (Z3), provenance (`CitationRef`), bi-temporal DuckDB engine, DAG graph. |
-| **Canonical Schemas** | `src/lilavati/schemas/` | Pydantic V2 models for statements, fixed income, options, econometrics, and execution. |
-| **FastMCP Servers** | `src/lilavati/mcp_servers/` | Standalone FastMCP microservices (`fixed_income.py`, `econometrics.py`, etc.). |
-| **Financial Skills** | `src/lilavati/skills/` | Composable playbooks (`SKILL.md` + Python scripts + schemas). |
-| **Role-Bound Agents** | `src/lilavati/agents/` | Multi-agent orchestration loops (Bull, Bear, Credit, Auditor). |
-| **Līlāvatī-Bench** | `src/lilavati/bench/` | Evaluation tracks, datasets, and scoring metrics (PoCS, ICR, TPI). |
-| **Tests** | `tests/` | Pytest suites matching module hierarchy. |
+| **Provenance** | `src/lilavati/core/provenance.py` | `CitationRef`, `SourcedValue`, SHA-256 document hashing. |
+| **Invariants (Z3)** | `src/lilavati/core/invariants.py` | `SuvarnaEngine`: 3-statement balance check, cash flow delta, debt covenants. |
+| **Econometrics** | `src/lilavati/core/econometrics.py` | `EconometricEngine`: ADF stationarity, Johansen cointegration, OU half-life, GARCH(1,1). |
+| **Financial ML** | `src/lilavati/core/financial_ml.py` | `FinancialMLEngine`: Fractional differentiation ($d^*$), Triple-Barrier labeling. |
+| **Fixed Income** | `src/lilavati/core/fixed_income.py` | `FixedIncomeEngine`: Bond pricing, Nelson-Siegel curves, Merton default model. |
+| **Statement DAG** | `src/lilavati/core/graph.py` | `StatementGraph`: Reactive 3-statement DAG with driver shocks and Z3 verification. |
+| **Sustainability** | `src/lilavati/core/sustainability.py` | `SustainabilityEngine`: WACI, carbon tax transition stress testing, SLB step-up covenants. |
+| **Bi-Temporal DB** | `src/lilavati/core/temporal.py` | `BiTemporalWarehouse`: DuckDB dual-time queries eliminating look-ahead bias. |
+| **SEC EDGAR** | `src/lilavati/connectors/edgar.py` | `EdgarClient`: SEC XBRL facts extraction into `ThreeStatementModel` with citations. |
+| **Market Data** | `src/lilavati/connectors/market_data.py` | `MarketDataClient`: Polars-vectorized OHLCV returns and Treasury yield term structures. |
+| **India Ind AS** | `src/lilavati/connectors/india_filings.py` | `IndiaFilingsClient`: MCA / BSE / NSE Ind AS XBRL crosswalk and ETRE engine. |
+| **Derivatives & Greeks** | `src/lilavati/core/derivatives.py` | `DerivativesEngine`: BSM European, CRR American, 1st & 2nd order Greeks, SABR calibration, butterfly arbitrage. |
 
 ---
 
-## 3. Tooling & Verification Workflow for Agents
+## 3. FastMCP Microservices Registry
+
+Every engine is exposed as a standalone FastMCP server in `src/lilavati/mcp_servers/`:
+
+1. **`econometrics_server.py`:** `analyze_stationarity`, `analyze_cointegration`, `fit_garch_volatility`.
+2. **`financial_ml_server.py`:** `find_optimal_fractional_diff`, `apply_triple_barrier_labels`.
+3. **`fixed_income_server.py`:** `analyze_bond`, `fit_yield_curve`, `evaluate_credit_risk_merton`.
+4. **`sustainability_server.py`:** `calculate_portfolio_carbon_intensity`, `stress_test_carbon_tax_impact`, `evaluate_sustainability_linked_bond_covenant`.
+5. **`corporate_filings_server.py`:** `get_company_filing_statements`, `extract_single_line_item`.
+6. **`derivatives_server.py`:** `price_european_option`, `price_american_option`, `calculate_option_greeks`, `calibrate_sabr_volatility_model`, `check_butterfly_arbitrage`.
+
+---
+
+## 4. Tooling & Verification Workflow for Agents
 
 When implementing features or fixing bugs, execute the following validation cycle:
 
@@ -85,22 +104,10 @@ uv run mypy src/
 
 ---
 
-## 4. Example: Writing a Deterministic Financial Skill
-
-When creating a new financial skill (e.g., in `src/lilavati/skills/beneish_m_score/`):
-
-1. **`schemas.py`:** Define strict Pydantic inputs and outputs, requiring citations.
-2. **`calculator.py`:** Write pure, typed Python/Polars calculation logic.
-3. **`SKILL.md`:** Document the financial theory, mathematical formula, inputs, outputs, and edge cases.
-4. **`test_skill.py`:** Test against a verified real-world filing (e.g., Enron 2000 10-K vs. non-manipulator firm).
-
----
-
 ## 5. Anti-Patterns to Avoid
 
-❌ **DO NOT** use `float` for currency where precision matters; use `Decimal` or scaled integers if exact cents are required.  
+❌ **DO NOT** use `float` for currency where exact cents are required; use `Decimal` or scaled integers.  
 ❌ **DO NOT** use `pandas` where `polars` can be used for high-performance vectorized operations.  
-❌ **DO NOT** suppress type errors with `# type: ignore` unless strictly necessary for external untyped libraries (like C-extensions in QuantLib).  
+❌ **DO NOT** suppress type errors with `# type: ignore` unless strictly necessary for untyped C-extensions.  
 ❌ **DO NOT** write unit tests that mock the entire calculation logic. Test real mathematical functions against known ground truths.  
 ❌ **DO NOT** hardcode SEC EDGAR URLs without user-agent headers compliant with SEC fair-access policies.
-

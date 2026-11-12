@@ -55,4 +55,6 @@ def test_ind_as_disclosure_parsing() -> None:
     assert "RevenueFromOperations" in sourced_map
     assert sourced_map["RevenueFromOperations"].unit == "INR"
     assert len(sourced_map["RevenueFromOperations"].citation.doc_hash) == 64
-    assert sourced_map["RevenueFromOperations"].citation.xbrl_tag == "mca-ind-as:RevenueFromOperations"
+    assert (
+        sourced_map["RevenueFromOperations"].citation.xbrl_tag == "mca-ind-as:RevenueFromOperations"
+    )
