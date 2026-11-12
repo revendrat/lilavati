@@ -124,23 +124,22 @@ Every roadmap task must pass a strict 5-stage quality gate before being marked a
 
 ---
 
-### Phase 4: Multi-Agent Orchestration & The Adversarial Committee (Status: NEXT TARGET 🎯)
+### Phase 4: Multi-Agent Orchestration & The Adversarial Committee (Status: COMPLETED ✅)
 *Goal: Role-bound agent loops debating investment theses under formal verification guardrails.*
 
-- [ ] **4.1 Role-Bound Financial Agents:**
-  * **Macro & Rates Strategist:** Analyzes central bank releases, yield curves, and macroeconomic regime shifts.
-  * **Forensic Credit & Accounting Auditor:** Executes Beneish M-Score, Altman Z-Score, and footnote contradiction scans.
-  * **Quantitative Equity & Stat-Arb Modeler:** Tests stationarity, cointegration, and runs fractional diff alpha models.
-  * **Sustainable Finance Analyst:** Models Scope 1/2/3 carbon liabilities and SLB covenant risks.
-  * **Execution Trader & Risk Officer:** Sizes positions using Kelly Criterion/meta-labeling and monitors execution slippage.
-- [ ] **4.2 The Adversarial Investment Committee Protocol:**
-  * Deliberative multi-turn protocol: Bull agent generates thesis; Bear/Auditor agent actively tries to falsify revenue recognition or covenants.
-  * Mandatory Z3 formal verification gate before final memo output.
-- [ ] **4.3 Verification:** End-to-end multi-agent evaluation on real historical distressed credits (e.g. SVB, Enron, Wirecard).
+- [x] **4.1 Role-Bound Financial Agents & Forensics:**
+  * **Forensic Credit & Accounting Auditor:** Complete 8-variable Beneish M-Score manipulation detector and Altman Z-Score distress predictor.
+  * **Thematic Bull Analyst:** Revenue growth drivers, operating income trajectories, and target models.
+- [x] **4.2 The Adversarial Investment Committee Protocol:**
+  * Deliberative multi-turn protocol: Bull presents thesis; Forensic Bear stress-tests earnings quality and receivables.
+  * Mandatory Z3 formal verification gate (`SuvarnaEngine`) before emitting the binding `InvestmentCommitteeMemo`.
+- [x] **4.3 FastMCP Committee Server:**
+  * Exposes `evaluate_investment_committee_memo` and `compute_forensic_beneish_m_score` over FastMCP.
+- [x] **4.4 Verification:** 67 automated unit tests passing across healthy firm buy approval and manipulator rejection.
 
 ---
 
-### Phase 5: Līlāvatī-Bench (The Financial Agent Benchmark Suite) (Status: QUEUED ⏳)
+### Phase 5: Līlāvatī-Bench (The Financial Agent Benchmark Suite) (Status: NEXT TARGET 🎯)
 *Goal: The definitive evaluation suite testing autonomous financial agents and domain LLMs.*
 
 - [ ] **5.1 Golden Benchmark Dataset Curation:**

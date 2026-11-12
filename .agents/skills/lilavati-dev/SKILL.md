@@ -71,6 +71,7 @@ When working on this repository, you are not writing a generic web application o
 | **India Ind AS** | `src/lilavati/connectors/india_filings.py` | `IndiaFilingsClient`: MCA / BSE / NSE Ind AS XBRL crosswalk and ETRE engine. |
 | **Derivatives & Greeks** | `src/lilavati/core/derivatives.py` | `DerivativesEngine`: BSM European, CRR American, 1st & 2nd order Greeks, SABR calibration, butterfly arbitrage. |
 | **Execution & Portfolio** | `src/lilavati/core/execution.py` | `ExecutionEngine`: LOB microstructure (OFI, microprice), Almgren-Chriss liquidation, Black-Litterman, HRP. |
+| **Forensics & Committee** | `src/lilavati/agents/committee.py` | `AdversarialCommittee` & `ForensicEngine`: Beneish M-Score, Altman Z-Score, multi-role investment memo. |
 
 ---
 
@@ -85,6 +86,7 @@ Every engine is exposed as a standalone FastMCP server in `src/lilavati/mcp_serv
 5. **`corporate_filings_server.py`:** `get_company_filing_statements`, `extract_single_line_item`.
 6. **`derivatives_server.py`:** `price_european_option`, `price_american_option`, `calculate_option_greeks`, `calibrate_sabr_volatility_model`, `check_butterfly_arbitrage`.
 7. **`portfolio_exec_server.py`:** `analyze_order_book_microstructure`, `compute_almgren_chriss_liquidation_schedule`, `optimize_portfolio_black_litterman`, `optimize_portfolio_hierarchical_risk_parity`.
+8. **`committee_server.py`:** `evaluate_investment_committee_memo`, `compute_forensic_beneish_m_score`.
 
 ---
 
