@@ -49,21 +49,18 @@ Līlāvatī spans the full capital structure and operational lifecycle of instit
                                   PROJECT LĪLĀVATĪ
                      Unified Institutional Agentic Architecture
                                          │
-    ┌──────────────────┬─────────────────┼─────────────────┬──────────────────┐
-    ▼                  ▼                 ▼                 ▼                  ▼
-PILLAR I:          PILLAR II:        PILLAR III:       PILLAR IV:         PILLAR V:
-Fixed Income       Financial         Financial ML      Derivatives &      Trading, Micro-
-& Credit           Econometrics      (de Prado)        Volatility         structure & Exec
-─────────────────  ────────────────  ────────────────  ─────────────────  ─────────────────
-• Yield Curves     • ADF / KPSS      • Dollar / Volume • SABR / Heston    • L2/L3 Order
-  (Nelson-Siegel)    Unit Root         Bars              Calibration        Books (OFI/VPIN)
-• Duration, KRD,   • Johansen        • Fractional      • Local Vol        • Almgren-Chriss
-  DV01 / PV01        Cointegration     Diff (d*)         Surfaces           Optimal Exec
-• Merton Default   • GARCH & DCC     • Triple-Barrier  • 1st & 2nd Order  • Black-Litterman
-  Model / CDS        Heterosked.       Labels            Greeks (Vanna,     & Hierarchical
-• Debt Covenants   • Markov Regime   • Purged &          Volga)             Risk Parity
-  & Waterfalls       Switching         Embargoed CV      • Delta Neutral    • VWAP / TWAP
-                     (MS-AR / HMM)   • Meta-Labeling     Rebalancing        Slippage Models
+    ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+    ▼              ▼              ▼              ▼              ▼              ▼
+PILLAR I:      PILLAR II:     PILLAR III:    PILLAR IV:     PILLAR V:      PILLAR VI:
+Fixed Income   Financial      Financial ML   Derivatives &  Trading &      Sustainable
+& Credit       Econometrics   (de Prado)     Volatility     Microstructure Finance
+─────────────  ─────────────  ─────────────  ─────────────  ─────────────  ─────────────
+• Yield Curves • ADF / KPSS   • Dollar Bars  • SABR/Heston  • L2/L3 Order  • Carbon WACI
+• Duration     • Johansen     • Fractional   • Local Vol      Books (OFI)  • Carbon Tax
+• Merton Model   Cointegration  Diff (d*)    • Greeks       • Almgren-       Stress Test
+• Debt Water-  • GARCH & DCC  • Triple-        Hedging        Chriss Exec  • SLB Step-Up
+  falls          Heterosked.    Barrier      • Arbitrage    • Black-         Covenants
+• Covenants    • Markov HMM   • Purged CV      Invariance     Litterman    • NGFS Scenarios
 ```
 
 ### Pillar I: Fixed Income, Debt & Credit Capital Markets
@@ -93,6 +90,11 @@ Fixed Income       Financial         Financial ML      Derivatives &      Tradin
 * **Order Book Dynamics:** L2/L3 order book depth reconstruction, Order Flow Imbalance (OFI), and VPIN toxicity detection.
 * **Optimal Execution:** Almgren-Chriss market impact vs. volatility trade-off, TWAP, VWAP, and POV algorithms.
 * **Portfolio Construction:** Black-Litterman allocation (fusing equilibrium priors with agent views) and Hierarchical Risk Parity (HRP).
+
+### Pillar VI: Sustainable Finance & Climate Risk Modeling
+* **Carbon Accounting & WACI:** Standardized calculation of Weighted Average Carbon Intensity (WACI) across Scope 1, Scope 2, and Scope 3 disclosures.
+* **Climate Transition Stress Testing:** Modeling the impact of shadow/statutory carbon prices ($P_{\text{carbon}}$) on operating margins, EBIT, and debt covenant headroom under NGFS scenarios.
+* **Sustainability-Linked Bonds (SLB):** Evaluation of Sustainability Performance Targets (SPTs) and deterministic calculation of penalty coupon step-up triggers.
 
 ---
 
@@ -133,7 +135,7 @@ Līlāvatī separates the cognitive reasoning of LLMs from deterministic mathema
 
 ## 🏆 Līlāvatī-Bench: The Financial Agent Benchmark
 
-To measure progress, we are developing **Līlāvatī-Bench**, an open benchmark testing autonomous agents and finance-tuned foundation models across six tracks:
+To measure progress, we are developing **Līlāvatī-Bench**, an open benchmark testing autonomous agents and finance-tuned foundation models across seven tracks:
 
 * **Track 1: Three-Statement Dynamic Reconciliation:** Propagation of operational shocks across 3 statements verified via Z3 SMT solver.
 * **Track 2: Fixed Income, Credit & Debt Waterfalls:** Recovery of debt indentures, tranche seniority, covenant headroom, and Merton default probabilities.
@@ -141,6 +143,7 @@ To measure progress, we are developing **Līlāvatī-Bench**, an open benchmark 
 * **Track 4: Financial ML Methodological Soundness:** Enforcement of fractional differentiation and purged cross-validation.
 * **Track 5: Derivatives & Volatility Arbitrage Invariance:** SABR calibration and arbitrage-free implied volatility surface constraints.
 * **Track 6: Market Microstructure & Optimal Execution:** Almgren-Chriss liquidation and VWAP slippage optimization on simulated order books.
+* **Track 7: Sustainable Finance & Climate Stress Testing:** Grounded extraction of Scope 1/2/3 disclosures, WACI portfolio calculation, carbon tax cash-flow impairments, and Sustainability-Linked Bond (SLB) covenant step-up verification.
 
 ---
 
