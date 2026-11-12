@@ -56,3 +56,4 @@ We demonstrate the framework across corporate credit analysis, derivatives prici
 ## 6. Conclusion & Roadmap
 
 * Path to open-source financial foundation models trained on verified reasoning traces.
+

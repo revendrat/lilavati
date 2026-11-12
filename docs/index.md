@@ -57,3 +57,4 @@ uv run lilavati-bench list-cases
 | **Pillar V** | Derivatives, Volatility Surfaces & Greeks | Black-Scholes-Merton, CRR Binomial Trees, SABR Calibration, Arbitrage Invariants |
 | **Pillar VI** | Market Microstructure & Optimal Execution | LOB Microprice, OFI, Almgren-Chriss Liquidation, Black-Litterman, HRP |
 | **Pillar VII** | Sustainable Finance & Climate Risk | Scope 1/2/3 WACI, Shadow Carbon Tax Stress Testing, SLB Step-Up Covenants |
+

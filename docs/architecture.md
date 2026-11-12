@@ -65,3 +65,4 @@ Every agent run captures:
 - SMT solver SAT/UNSAT status and violation descriptions.
 - Token consumption and financial document SHA-256 hashes.
 - Immutable JSONL audit file exports for compliance.
+

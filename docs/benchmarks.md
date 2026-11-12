@@ -48,3 +48,4 @@ To run the benchmark against any model:
 ```bash
 uv run lilavati-bench run --model <model-name> --format markdown
 ```
+

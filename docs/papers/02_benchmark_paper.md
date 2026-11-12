@@ -53,3 +53,4 @@ Across our evaluation of state-of-the-art commercial and open-source models, sta
 
 * Command-line execution via `lilavati-bench`.
 * Submission guidelines for model creators.
+
