@@ -180,7 +180,7 @@ We are building a welcoming, mathematically rigorous community of:
 * **Core Software Engineers:** Scale FastMCP servers, DuckDB bi-temporal pipelines, and Rust bindings.
 * **Academic Contributors:** Expand golden datasets for `Līlāvatī-Bench`.
 
-Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
+Please read our [Contributing Guidelines](CONTRIBUTING.md) to get started, and explore our [Development Roadmap & To-Do List](ROADMAP.md) to track active and upcoming engineering milestones.
 
 ### Coding with AI Tools (Claude Code, Cursor, Antigravity, Codex)
 

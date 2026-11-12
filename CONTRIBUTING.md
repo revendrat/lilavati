@@ -4,7 +4,7 @@ Thank you for your interest in contributing to **Project Līlāvatī**! 🪷
 
 Līlāvatī is an open-source, neuro-symbolic agentic operating system and benchmark suite designed for institutional finance. Our goal is to bring mathematical rigor, zero-arithmetic guarantees, and formal verification to financial AI.
 
-Whether you are a quantitative researcher, an academic economist, a software engineer, or a financial analyst, your contributions are invaluable.
+Whether you are a quantitative researcher, an academic economist, a software engineer, or a financial analyst, your contributions are invaluable. Please review our [Development Roadmap & To-Do List](ROADMAP.md) to see active priorities.
 
 ---
 
