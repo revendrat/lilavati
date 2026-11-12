@@ -29,7 +29,9 @@ class PortfolioCarbonResult(BaseModel):
 
     waci: float = Field(..., description="Weighted Average Carbon Intensity (tCO2e / $M revenue)")
     total_carbon_footprint: float = Field(..., description="Total financed emissions (tCO2e)")
-    carbon_intensity_clean: bool = Field(..., description="True if below Paris-aligned benchmark threshold")
+    carbon_intensity_clean: bool = Field(
+        ..., description="True if below Paris-aligned benchmark threshold"
+    )
 
 
 class SustainabilityEngine:
@@ -51,7 +53,9 @@ class SustainabilityEngine:
         r = np.asarray(revenues_millions, dtype=np.float64)
 
         if not (len(w) == len(e) == len(r)):
-            raise ValueError(f"Dimension mismatch: weights ({len(w)}), emissions ({len(e)}), revenues ({len(r)})")
+            raise ValueError(
+                f"Dimension mismatch: weights ({len(w)}), emissions ({len(e)}), revenues ({len(r)})"
+            )
         if np.any(r <= 0):
             raise ValueError("Revenues must be strictly positive to compute carbon intensity.")
 

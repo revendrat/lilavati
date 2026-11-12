@@ -34,4 +34,3 @@ def test_mcp_merton_tool() -> None:
     assert "distance_to_default" in res
     assert "default_probability" in res
     assert res["distance_to_default"] > 0.0
-

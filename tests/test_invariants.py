@@ -89,4 +89,3 @@ def test_debt_covenant_breach() -> None:
     assert len(result.violations) == 2
     assert any("Net Leverage" in v for v in result.violations)
     assert any("Interest Coverage" in v for v in result.violations)
-

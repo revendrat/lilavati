@@ -65,30 +65,30 @@ Every roadmap task must pass a strict 5-stage quality gate before being marked a
 
 ---
 
-### Phase 1: Real-World Ingestion & Bi-Temporal Connectors (Status: IN PROGRESS 🎯)
+### Phase 1: Real-World Ingestion & Bi-Temporal Connectors (Status: COMPLETED ✅)
 *Goal: Connect the engine to live, real-world corporate filings and macroeconomic data feeds without look-ahead bias.*
 
-- [ ] **1.1 SEC EDGAR XBRL / Company Facts Connector:**
+- [x] **1.1 SEC EDGAR XBRL / Company Facts Connector:**
   * Pulls live company filings (10-K, 10-Q) from SEC EDGAR API with compliant User-Agent headers.
   * Parses standardized `us-gaap` taxonomy line items into canonical `ThreeStatementModel`.
   * Generates cryptographic `CitationRef` for every parsed fact.
   * *Validation:* Parse Apple (AAPL) and Microsoft (MSFT) latest 10-K and verify $Assets = Liabilities + Equity$.
-- [ ] **1.2 Market & Macro Series Connector:**
+- [x] **1.2 Market & Macro Series Connector:**
   * Async connector for historical OHLCV data (daily and intraday bars) normalized to Polars DataFrames.
   * Federal Reserve Economic Data (FRED) connector for SOFR, Treasury yields, CPI, and Fed Funds rate.
   * *Validation:* Fetch 5-year Treasury constant maturity series and verify Nelson-Siegel fit.
-- [ ] **1.3 India BSE/NSE Ind AS Corporate Filings Connector:**
+- [x] **1.3 India BSE/NSE Ind AS Corporate Filings Connector:**
   * Ingestion wrapper for Indian corporate disclosures and MCA Ind AS taxonomy filings.
   * Entity Taxonomy Reconciliation Engine (ETRE) mapping Ind AS terms to canonical `ChartOfAccounts`.
   * *Validation:* Parse Reliance Industries or Infosys annual report balance sheet with 100% reconciliation.
-- [ ] **1.4 Bi-Temporal DuckDB Local Data Warehouse:**
+- [x] **1.4 Bi-Temporal DuckDB Local Data Warehouse:**
   * DuckDB storage layer implementing dual-time indexing: `valid_time` (period described) vs `as_of_timestamp` (filing date).
   * Enforces temporal filters preventing look-ahead leakage in historical backtests.
   * *Validation:* Query historical filing before and after an 8-K/restatement; verify restatement is invisible at $T_0$.
 
 ---
 
-### Phase 2: Derivatives, Volatility Surfaces & Risk Engine (Status: QUEUED ⏳)
+### Phase 2: Derivatives, Volatility Surfaces & Risk Engine (Status: NEXT TARGET 🎯)
 *Goal: Institutional derivatives pricing, volatility surface modeling, and multi-asset Greeks risk.*
 
 - [ ] **2.1 Option Pricing Suite:**
@@ -181,3 +181,4 @@ Every roadmap task must pass a strict 5-stage quality gate before being marked a
   * MkDocs Material documentation website with interactive notebooks.
 - [ ] **6.4 Community Launch:**
   * Release on GitHub, Hugging Face Spaces leaderboard, Hacker News, Reddit (r/algotrading, r/MachineLearning), and FINOS.
+

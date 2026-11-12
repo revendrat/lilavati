@@ -42,4 +42,3 @@ def test_mcp_slb_tool() -> None:
     )
     assert res["spt_achieved"] is True
     assert res["active_coupon_rate"] == 0.04
-
