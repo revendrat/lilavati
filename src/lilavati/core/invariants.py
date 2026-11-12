@@ -30,6 +30,56 @@ class SuvarnaEngine:
     """Formal verification engine for financial statements and quantitative models."""
 
     @staticmethod
+    def verify_balance_sheet_equation(
+        total_assets: float,
+        total_liabilities: float,
+        shareholders_equity: float,
+        tolerance: float = 1e-4,
+    ) -> InvariantCheckResult:
+        """
+        Formally verifies balance sheet equilibrium using Z3 SMT solver:
+        Assets == Liabilities + Equity (within tolerance).
+        """
+        solver = z3.Solver()
+        a = z3.Real("total_assets")
+        liab = z3.Real("total_liabilities")
+        e = z3.Real("shareholders_equity")
+
+        tol = z3.RealVal(str(tolerance))
+        neg_tol = z3.RealVal(str(-tolerance))
+
+        diff = a - (liab + e)
+        solver.add(diff >= neg_tol)
+        solver.add(diff <= tol)
+
+        solver.add(a == z3.RealVal(str(total_assets)))
+        solver.add(liab == z3.RealVal(str(total_liabilities)))
+        solver.add(e == z3.RealVal(str(shareholders_equity)))
+
+        check = solver.check()
+        if check == z3.sat:
+            return InvariantCheckResult(
+                is_valid=True,
+                status="SAT",
+                violations=[],
+                model_values={
+                    "total_assets": total_assets,
+                    "total_liabilities": total_liabilities,
+                    "shareholders_equity": shareholders_equity,
+                },
+            )
+
+        err = abs(total_assets - (total_liabilities + shareholders_equity))
+        return InvariantCheckResult(
+            is_valid=False,
+            status="UNSAT",
+            violations=[
+                f"Balance sheet mismatch: Assets ({total_assets}) != Liabilities ({total_liabilities}) "
+                f"+ Equity ({shareholders_equity}). Discrepancy = {err:.4f}"
+            ],
+        )
+
+    @staticmethod
     def verify_three_statement_invariants(
         total_assets: float,
         total_liabilities: float,

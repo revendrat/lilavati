@@ -72,6 +72,11 @@ When working on this repository, you are not writing a generic web application o
 | **Derivatives & Greeks** | `src/lilavati/core/derivatives.py` | `DerivativesEngine`: BSM European, CRR American, 1st & 2nd order Greeks, SABR calibration, butterfly arbitrage. |
 | **Execution & Portfolio** | `src/lilavati/core/execution.py` | `ExecutionEngine`: LOB microstructure (OFI, microprice), Almgren-Chriss liquidation, Black-Litterman, HRP. |
 | **Forensics & Committee** | `src/lilavati/agents/committee.py` | `AdversarialCommittee` & `ForensicEngine`: Beneish M-Score, Altman Z-Score, multi-role investment memo. |
+| **Prompts Catalog** | `src/lilavati/prompts/` | Institutional system instructions, Bull/Bear/Sustainability prompts, and SMT reflection generators. |
+| **LLM Adapter** | `src/lilavati/llm/` | `UniversalLLMClient` multi-provider connectivity (Gemini, Claude, OpenAI, vLLM, Ollama) with FastMCP tool binding. |
+| **Tracing & Telemetry** | `src/lilavati/tracing/` | `Tracer` & `TraceSpan`: OpenTelemetry-compatible spans, JSONL audit trails, and compliance summaries. |
+| **Agent Runtime** | `src/lilavati/runtime/` | `NeuroSymbolicAgent`: Autonomous loop with FastMCP sandboxed tools and Z3 SMT self-correction reflection. |
+| **Benchmark Suite** | `src/lilavati/bench/` | `Līlāvatī-Bench`: 7 quantitative tracks, PoCS, ICR, TPI, TMPR evaluators, and `lilavati-bench` CLI. |
 
 ---
 
