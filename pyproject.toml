@@ -103,6 +103,7 @@ module = [
     "z3.*",
     "statsmodels.*",
     "arch.*",
+    "scipy.*",
     "QuantLib.*",
 ]
 ignore_missing_imports = true
