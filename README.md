@@ -163,7 +163,7 @@ If you use Līlāvatī in your research or applications, please cite:
   year = {2026},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/lilavati-ai/lilavati}}
+  howpublished = {\url{https://github.com/revendrat/lilavati}}
 }
 ```
 

@@ -71,10 +71,10 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/lilavati-ai/lilavati"
-Documentation = "https://github.com/lilavati-ai/lilavati#readme"
-Repository = "https://github.com/lilavati-ai/lilavati.git"
-Issues = "https://github.com/lilavati-ai/lilavati/issues"
+Homepage = "https://github.com/revendrat/lilavati"
+Documentation = "https://github.com/revendrat/lilavati#readme"
+Repository = "https://github.com/revendrat/lilavati.git"
+Issues = "https://github.com/revendrat/lilavati/issues"
 
 [build-system]
 requires = ["hatchling"]
@@ -97,6 +97,15 @@ strict = true
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "z3.*",
+    "statsmodels.*",
+    "arch.*",
+    "QuantLib.*",
+]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "8.0"

@@ -30,7 +30,7 @@ We use [`uv`](https://docs.astral.sh/uv/) for Python package management. Ensure 
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/lilavati-ai/lilavati.git
+git clone https://github.com/revendrat/lilavati.git
 cd lilavati
 
 # 2. Install dependencies with uv

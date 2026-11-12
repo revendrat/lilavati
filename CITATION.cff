@@ -5,8 +5,8 @@ authors:
 title: "Līlāvatī: An Open-Source, Neuro-Symbolic Agentic Operating System and Benchmark Suite for Institutional Finance"
 version: 0.1.0
 date-released: 2026-11-13
-url: "https://github.com/lilavati-ai/lilavati"
-repository-code: "https://github.com/lilavati-ai/lilavati"
+url: "https://github.com/revendrat/lilavati"
+repository-code: "https://github.com/revendrat/lilavati"
 keywords:
   - "quantitative finance"
   - "financial agents"
