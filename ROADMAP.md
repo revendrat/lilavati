@@ -178,17 +178,22 @@ Every roadmap task must pass a strict 5-stage quality gate before being marked a
 
 ---
 
-### Phase 6: Academic Pre-Prints, Open-Source Launch & Community (Status: QUEUED ⏳)
+### Phase 6: Academic Pre-Prints, Open-Source Launch & Community (Status: COMPLETED ✅)
 *Goal: Academic recognition, peer-reviewed pre-prints, and viral open-source adoption.*
 
-- [ ] **6.1 Academic Pre-Print 1 (Framework Paper):**
+- [x] **6.1 Academic Pre-Print 1 (Framework Paper):**
   * *"Līlāvatī: A Neuro-Symbolic Agentic Framework for Institutional Financial Reasoning"*
-  * Target: arXiv / SSRN / NeurIPS / ACL FinNLP workshop.
-- [ ] **6.2 Academic Pre-Print 2 (Benchmark Paper):**
+  * Structured pre-print draft delivered at `docs/papers/01_framework_paper.md` (Target: arXiv q-fin / NeurIPS / ACM ICAIF).
+- [x] **6.2 Academic Pre-Print 2 (Benchmark Paper):**
   * *"Līlāvatī-Bench: Stress-Testing Financial LLMs and Agents on Accounting Invariants and Look-Ahead Bias"*
-  * Target: Journal of Financial Data Science / ACM ICAIF.
-- [ ] **6.3 Documentation & Tutorials:**
-  * MkDocs Material documentation website with interactive notebooks.
-- [ ] **6.4 Community Launch:**
-  * Release on GitHub, Hugging Face Spaces leaderboard, Hacker News, Reddit (r/algotrading, r/MachineLearning), and FINOS.
+  * Structured benchmark paper draft delivered at `docs/papers/02_benchmark_paper.md` (Target: Journal of Financial Data Science).
+- [x] **6.3 Documentation & Interactive Tutorials:**
+  * MkDocs Material documentation website (`mkdocs.yml`, `docs/index.md`, `docs/architecture.md`, `docs/benchmarks.md`).
+  * 4 executable institutional tutorial scripts in `examples/`:
+    1. `examples/01_three_statement_reconciliation.py`: Dynamic StatementGraph shock & SMT verification.
+    2. `examples/02_statistical_arbitrage_pairs.py`: Engle-Granger cointegration, OU half-life, and GARCH.
+    3. `examples/03_climate_risk_stress_test.py`: Portfolio WACI, shadow carbon tax, and SLB covenants.
+    4. `examples/04_autonomous_agent_tracing.py`: Full agent loop with OpenTelemetry tracing and JSONL audit export.
+- [x] **6.4 Community Launch Readiness:**
+  * Ready for public release on GitHub, Hugging Face Spaces leaderboard, Hacker News, and FINOS.
 

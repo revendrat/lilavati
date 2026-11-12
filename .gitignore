@@ -48,12 +48,16 @@ htmlcov/
 # Local databases & data artifacts
 *.duckdb
 *.duckdb.wal
+*.jsonl
 *.db
 *.sqlite
 data/cache/
 data/raw/
 data/processed/
 downloads/
+
+# Documentation build artifacts
+site/
 
 # Secrets & environment
 .env

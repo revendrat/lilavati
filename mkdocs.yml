@@ -1,0 +1,55 @@
+site_name: Project Līlāvatī
+site_description: An Open-Source Neuro-Symbolic Agentic Operating System & Benchmark for Institutional Finance
+site_author: Project Līlāvatī Contributors
+site_url: https://github.com/revendrat/lilavati
+repo_url: https://github.com/revendrat/lilavati
+repo_name: revendrat/lilavati
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Architecture & Runtime: architecture.md
+  - Līlāvatī-Bench: benchmarks.md
+  - Academic Pre-Prints:
+      - "Framework Paper (Pre-Print 1)": papers/01_framework_paper.md
+      - "Benchmark Paper (Pre-Print 2)": papers/02_benchmark_paper.md
+  - Contributing: contributing.md
