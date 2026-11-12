@@ -147,7 +147,14 @@ Every roadmap task must pass a strict 5-stage quality gate before being marked a
 - [x] **4.7 Institutional Tracing & OpenTelemetry Audit Trail (`src/lilavati/tracing/`):**
   * OpenTelemetry-compatible span models capturing agent runs, model calls, tool executions, SMT verification results, and citation checks.
   * Immutable JSONL audit trail exporter and compliance summaries.
-- [x] **4.8 Verification:** 79 automated unit tests passing across multi-role committee deliberation, model connectivity, tracing, and runtime loops.
+- [x] **4.8 Institutional Tracing & OpenTelemetry Audit Trail (`src/lilavati/tracing/`):**
+  * OpenTelemetry-compatible span models capturing agent runs, model calls, tool executions, SMT verification results, and citation checks.
+  * Immutable JSONL audit trail exporter and compliance summaries.
+- [x] **4.9 Advanced Autonomous Financial Agents (Search, Deep, Research) (`src/lilavati/agents/`):**
+  * **FinancialSearchAgent:** Autonomous multi-source discovery across SEC EDGAR, India BSE/NSE Ind AS, and macro feeds with SHA-256 cryptographic provenance.
+  * **DeepFinancialAgent:** Deep reasoning hypothesis tree search (Bull, Base, Bear) evaluated through reactive DAGs and Z3 SMT invariant pruning.
+  * **FinancialResearchAgent:** End-to-end equity and credit research dossier synthesis integrating filing retrieval, forensic audits, deep scenario trees, and carbon WACI.
+- [x] **4.10 Verification:** 88 automated unit tests passing across multi-role committee deliberation, model connectivity, tracing, runtime loops, and advanced agents.
 
 ---
 

@@ -72,6 +72,9 @@ When working on this repository, you are not writing a generic web application o
 | **Derivatives & Greeks** | `src/lilavati/core/derivatives.py` | `DerivativesEngine`: BSM European, CRR American, 1st & 2nd order Greeks, SABR calibration, butterfly arbitrage. |
 | **Execution & Portfolio** | `src/lilavati/core/execution.py` | `ExecutionEngine`: LOB microstructure (OFI, microprice), Almgren-Chriss liquidation, Black-Litterman, HRP. |
 | **Forensics & Committee** | `src/lilavati/agents/committee.py` | `AdversarialCommittee` & `ForensicEngine`: Beneish M-Score, Altman Z-Score, multi-role investment memo. |
+| **Search Agent** | `src/lilavati/agents/search.py` | `FinancialSearchAgent`: Autonomous discovery across SEC EDGAR, Ind AS, and FRED with SHA-256 provenance. |
+| **Deep Agent** | `src/lilavati/agents/deep.py` | `DeepFinancialAgent`: Hypothesis tree exploration (Bull/Base/Bear) with Z3 SMT invariant branch pruning. |
+| **Research Agent** | `src/lilavati/agents/research.py` | `FinancialResearchAgent`: End-to-end investment research dossier with forensic and climate auditing. |
 | **Prompts Catalog** | `src/lilavati/prompts/` | Institutional system instructions, Bull/Bear/Sustainability prompts, and SMT reflection generators. |
 | **LLM Adapter** | `src/lilavati/llm/` | `UniversalLLMClient` multi-provider connectivity (Gemini, Claude, OpenAI, vLLM, Ollama) with FastMCP tool binding. |
 | **Tracing & Telemetry** | `src/lilavati/tracing/` | `Tracer` & `TraceSpan`: OpenTelemetry-compatible spans, JSONL audit trails, and compliance summaries. |

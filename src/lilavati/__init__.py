@@ -5,6 +5,9 @@ An open-source, neuro-symbolic agentic framework and benchmark suite
 for quantitative finance, credit, financial econometrics, and algorithmic execution.
 """
 
+from lilavati.agents.deep import DeepFinancialAgent, DeepReasoningTree
+from lilavati.agents.research import FinancialResearchAgent, ResearchDossier
+from lilavati.agents.search import FinancialSearchAgent, SearchReport
 from lilavati.core.invariants import SuvarnaEngine
 from lilavati.core.provenance import CitationRef, SourcedValue
 from lilavati.framework.agent import FinancialAgent
@@ -22,6 +25,12 @@ __version__ = "0.1.0"
 
 __all__ = [
     "FinancialAgent",
+    "FinancialSearchAgent",
+    "DeepFinancialAgent",
+    "FinancialResearchAgent",
+    "ResearchDossier",
+    "DeepReasoningTree",
+    "SearchReport",
     "FinancialStateGraph",
     "CompiledFinancialGraph",
     "FinancialState",
