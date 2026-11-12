@@ -104,6 +104,7 @@ module = [
     "statsmodels.*",
     "arch.*",
     "scipy.*",
+    "cvxpy.*",
     "QuantLib.*",
 ]
 ignore_missing_imports = true

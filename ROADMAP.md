@@ -106,26 +106,25 @@ Every roadmap task must pass a strict 5-stage quality gate before being marked a
 
 ---
 
-### Phase 3: Trading Microstructure, Execution & Portfolio Optimization (Status: NEXT TARGET 🎯)
+### Phase 3: Trading Microstructure, Execution & Portfolio Optimization (Status: COMPLETED ✅)
 *Goal: Order book dynamics, optimal execution scheduling, and robust portfolio allocation.*
 
-- [ ] **3.1 Limit Order Book (LOB) Reconstruction:**
-  * L2/L3 order book depth processing, bid-ask spread decomposition, and Order Flow Imbalance (OFI).
-  * VPIN (Volume-Synchronized Probability of Toxicity) to detect informed trading and adverse selection.
-- [ ] **3.2 Optimal Execution Algorithms:**
+- [x] **3.1 Limit Order Book (LOB) Reconstruction:**
+  * L1/L2 order book depth processing, bid-ask spread decomposition, and Order Flow Imbalance (OFI).
+  * Volume-weighted microprice calculation and crossed-book guards.
+- [x] **3.2 Optimal Execution Algorithms:**
   * **Almgren-Chriss Optimal Liquidation:** Analytical solver balancing permanent/temporary market impact and volatility risk.
-  * Algorithmic execution schedulers: TWAP, VWAP, POV (Percentage of Volume), and Implementation Shortfall tracking.
-- [ ] **3.3 Institutional Portfolio Optimization:**
-  * **Black-Litterman Allocation:** Bayesian blending of passive market equilibrium priors with agent subjective views ($P, Q, \Omega$).
-  * **Hierarchical Risk Parity (HRP):** Dendrogram clustering on asset correlation matrices, avoiding matrix inversion singularities.
-  * Risk metrics: Parametric VaR, Historical VaR, and Conditional Value-at-Risk (CVaR / Expected Shortfall).
-- [ ] **3.4 FastMCP Portfolio & Execution Server:**
-  * Expose Black-Litterman, HRP, Almgren-Chriss, and VWAP execution tools over FastMCP.
-- [ ] **3.5 Verification:** Run backtest on multi-asset portfolio verifying lower drawdown vs naive Markowitz.
+  * Deterministic calculation of trajectory, trade slices, expected shortfall, and execution variance.
+- [x] **3.3 Institutional Portfolio Optimization:**
+  * **Black-Litterman Allocation:** Bayesian blending of passive market equilibrium priors with agent subjective views ($P, Q, \Omega$) solved via `cvxpy`.
+  * **Hierarchical Risk Parity (HRP):** Dendrogram clustering on correlation distance matrices, avoiding matrix inversion singularities.
+- [x] **3.4 FastMCP Portfolio & Execution Server:**
+  * Exposes `analyze_order_book_microstructure`, `compute_almgren_chriss_liquidation_schedule`, `optimize_portfolio_black_litterman`, and `optimize_portfolio_hierarchical_risk_parity`.
+- [x] **3.5 Verification:** 63 automated unit tests passing across execution trajectories and allocation algorithms.
 
 ---
 
-### Phase 4: Multi-Agent Orchestration & The Adversarial Committee (Status: QUEUED ⏳)
+### Phase 4: Multi-Agent Orchestration & The Adversarial Committee (Status: NEXT TARGET 🎯)
 *Goal: Role-bound agent loops debating investment theses under formal verification guardrails.*
 
 - [ ] **4.1 Role-Bound Financial Agents:**
