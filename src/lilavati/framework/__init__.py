@@ -16,6 +16,7 @@ from lilavati.framework.gates import (
     TemporalPurityGate,
 )
 from lilavati.framework.graph import END, CompiledFinancialGraph, FinancialStateGraph
+from lilavati.framework.serving import create_agent_api, serve_agent
 from lilavati.framework.state import FinancialState
 
 __all__ = [
@@ -28,4 +29,6 @@ __all__ = [
     "CovenantGate",
     "ProvenanceGate",
     "TemporalPurityGate",
+    "create_agent_api",
+    "serve_agent",
 ]

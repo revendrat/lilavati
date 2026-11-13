@@ -97,16 +97,16 @@ Līlāvatī-Bench consists of golden, human-curated, and mathematically audited 
 
 ```python
 class BenchmarkTestCase(BaseModel):
-    case_id: str                      # e.g., LILAVATI-T1-001
-    track: str                        # track1_three_statement, etc.
-    title: str                        # Human-readable scenario title
-    prompt: str                       # Query submitted to the evaluated agent
-    as_of_date: date                  # Strict Point-in-Time cutoff (T_cutoff)
-    doc_hash: str                     # SHA-256 hash of primary regulatory filing
-    source_citation: str              # Statutory citation (e.g. SEC CIK, Item, pp.)
-    context_data: dict[str, Any]      # Empirical time-series and inputs
-    expected_values: dict[str, Any]   # Theorem-proven ground truths
-    tolerance: float                  # Relative numerical tolerance (e.g. 1e-3)
+    case_id: str  # e.g., LILAVATI-T1-001
+    track: str  # track1_three_statement, etc.
+    title: str  # Human-readable scenario title
+    prompt: str  # Query submitted to the evaluated agent
+    as_of_date: date  # Strict Point-in-Time cutoff (T_cutoff)
+    doc_hash: str  # SHA-256 hash of primary regulatory filing
+    source_citation: str  # Statutory citation (e.g. SEC CIK, Item, pp.)
+    context_data: dict[str, Any]  # Empirical time-series and inputs
+    expected_values: dict[str, Any]  # Theorem-proven ground truths
+    tolerance: float  # Relative numerical tolerance (e.g. 1e-3)
 ```
 
 ### Track 1: Three-Statement Dynamic Reconciliation

@@ -146,9 +146,9 @@ where $\hat{\mathbf{x}}$ represents the vector of empirical observations extract
 ```python
 # Formal Z3 SMT Assertion in SuvarnaEngine
 solver = z3.Solver()
-a, liab, e = z3.Real('assets'), z3.Real('liabilities'), z3.Real('equity')
-c_curr, c_prev = z3.Real('cash_t'), z3.Real('cash_t_minus_1')
-cfo, cfi, cff = z3.Real('cfo'), z3.Real('cfi'), z3.Real('cff')
+a, liab, e = z3.Real("assets"), z3.Real("liabilities"), z3.Real("equity")
+c_curr, c_prev = z3.Real("cash_t"), z3.Real("cash_t_minus_1")
+cfo, cfi, cff = z3.Real("cfo"), z3.Real("cfi"), z3.Real("cff")
 
 # Invariant 1: Balance Sheet Equilibrium
 solver.add(z3.Abs(a - (liab + e)) <= tolerance)

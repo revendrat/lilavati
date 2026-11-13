@@ -48,6 +48,8 @@ extra_javascript:
 nav:
   - Home: index.md
   - Architecture & Runtime: architecture.md
+  - Tutorials & Developer Guide:
+      - "Build Your First Agent & API": tutorials/01_build_your_first_financial_agent.md
   - Līlāvatī-Bench: benchmarks.md
   - Academic Pre-Prints:
       - "Framework Paper (Pre-Print 1)": papers/01_framework_paper.md

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import copy
 from collections.abc import Callable
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, cast
 
 from lilavati.framework.state import FinancialState
 from lilavati.tracing.spans import SpanType
@@ -47,6 +47,7 @@ class CompiledFinancialGraph(Generic[S]):
         edges: dict[str, str],
         conditional_edges: dict[str, ConditionalEdge[S]],
         entry_point: str,
+        state_schema: type[S] | None = None,
         tracer: Tracer | None = None,
         max_steps: int = 25,
     ) -> None:
@@ -54,6 +55,9 @@ class CompiledFinancialGraph(Generic[S]):
         self.edges = edges
         self.conditional_edges = conditional_edges
         self.entry_point = entry_point
+        self.state_schema: type[S] = (
+            state_schema if state_schema is not None else cast(type[S], FinancialState)
+        )
         self.tracer = tracer or Tracer()
         self.max_steps = max_steps
 
@@ -62,7 +66,7 @@ class CompiledFinancialGraph(Generic[S]):
         # Convert dictionary to FinancialState if needed
         state: S
         if isinstance(initial_state, dict):
-            state = FinancialState(**initial_state)  # type: ignore[assignment]
+            state = self.state_schema(**initial_state)
         else:
             state = copy.deepcopy(initial_state)
 
@@ -122,7 +126,9 @@ class FinancialStateGraph(Generic[S]):
     """
 
     def __init__(self, state_schema: type[S] | None = None) -> None:
-        self.state_schema = state_schema or FinancialState
+        self.state_schema: type[S] = (
+            state_schema if state_schema is not None else cast(type[S], FinancialState)
+        )
         self.nodes: dict[str, Callable[[S], S]] = {}
         self.edges: dict[str, str] = {}
         self.conditional_edges: dict[str, ConditionalEdge[S]] = {}
@@ -167,6 +173,7 @@ class FinancialStateGraph(Generic[S]):
             edges=self.edges,
             conditional_edges=self.conditional_edges,
             entry_point=self.entry_point,
+            state_schema=self.state_schema,
             tracer=tracer,
             max_steps=max_steps,
         )
