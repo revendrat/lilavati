@@ -7,7 +7,7 @@
 ## The Four Core Institutional Metrics
 
 1. **Proof-of-Citation Score (PoCS):**
-   $$\text{PoCS} = \frac{\sum \text{Verified Claims with Matching Document SHA-256 \& Valid Span}}{\text{Total Extracted Claims}}$$
+   $$\text{PoCS} = \frac{\sum \text{Verified Claims with Matching Document SHA-256 and Valid Span}}{\text{Total Extracted Claims}}$$
    Measures whether claims trace back to statutory filings without hallucinations.
 
 2. **Accounting Invariant Compliance Rate (ICR):**
