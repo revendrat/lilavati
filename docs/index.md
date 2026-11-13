@@ -7,7 +7,7 @@
 
 ## What is Project Līlāvatī?
 
-**Project Līlāvatī** is an open-source, neuro-symbolic agentic operating system and evaluation benchmark suite exclusively engineered for institutional quantitative finance, debt/credit markets, econometrics, financial machine learning, derivatives, market microstructure, and sustainability finance.
+**Project Līlāvatī** is an open-source, audited & verifiable agentic stack and evaluation benchmark suite exclusively engineered for institutional quantitative finance, debt/credit markets, econometrics, financial machine learning, derivatives, market microstructure, and sustainability finance. Under the hood, it pairs generative semantic perception with deterministic formal verification and theorem proving.
 
 Generic LLM agent frameworks fail in institutional finance because they treat numbers as text tokens, suffer from mental math hallucinations, leak future information through look-ahead bias, and lack auditable provenance.
 

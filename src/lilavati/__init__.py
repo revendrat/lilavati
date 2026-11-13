@@ -1,8 +1,8 @@
 """
 Līlāvatī (लीलावती)
 ==================
-An open-source, neuro-symbolic agentic framework and benchmark suite
-for quantitative finance, credit, financial econometrics, and algorithmic execution.
+An open-source, audited & verifiable agentic stack and benchmark suite
+for institutional quantitative finance, credit, econometrics, and algorithmic execution.
 """
 
 from lilavati.agents.deep import DeepFinancialAgent, DeepReasoningTree

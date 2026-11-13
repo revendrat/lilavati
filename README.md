@@ -2,7 +2,7 @@
 
 # 🪷 Līlāvatī (लीलावती)
 
-### The Open-Source, Neuro-Symbolic Agentic Stack for Institutional Finance
+### The Open-Source, Audited & Verifiable Agentic Stack for Institutional Finance
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
