@@ -48,6 +48,8 @@ htmlcov/
 # Local databases & data artifacts
 *.duckdb
 *.duckdb.wal
+data/sample_filings/
+data/*.pdf
 *.jsonl
 *.db
 *.sqlite
