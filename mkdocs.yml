@@ -95,6 +95,7 @@ nav:
       - Econometrics: validation/econometrics.md
       - Financial ML: validation/financial_ml.md
       - Execution & portfolio: validation/execution.md
+      - Statement graph: validation/statement_graph.md
       - Filing connectors: validation/connectors.md
       - Libraries, solvers & citations: validation/libraries.md
   - Līlāvatī-Bench: benchmarks.md

@@ -160,10 +160,18 @@ Do not tag, publish or announce until every item below is true; then ask the mai
 - [ ] Optionally enable GitHub Discussions for questions. *Blocked: maintainer action (GitHub settings).*
 
 **Disclosed limitations (follow-up work, not blockers)**
-- [ ] Remaining engine audits: order book, Black-Litterman, HRP, statement graph, connectors (7.3). The
-      statement graph plugs equity to balance, so each scenario branch's `smt_invariant_verified` holds by
-      construction (found 2026-11-24); its retained earnings are one year's net income. *Due: 2026-12-01
-      for Black-Litterman and HRP: check issues #15 and #16 first; if unclaimed, audit both.*
+- [ ] Remaining engine audits: order book (open to contributors as #14), Black-Litterman, HRP, connectors
+      (7.3). *Due: 2026-12-01 for Black-Litterman and HRP: check issues #15 and #16 first; if unclaimed,
+      audit both.*
+- [x] Statement graph slice of the engine audits (2026-11-27): no equity plug (the balance check held for
+      any input), CFO includes the working-capital changes, retained earnings roll forward, the opening
+      balance sheet must balance, scenario branches keep every driver (they dropped receivable and payable
+      days), the research agent opens the graph at the filing's balance sheet. Hand-checked
+      (`docs/validation/statement_graph.md`); still not reference-checked.
+- [ ] Statement graph: check against a published three-statement worked example, and model the lines it
+      holds constant (debt issuance and repayment, dividends and buybacks, inventory).
+- [ ] Tutorial for the statement graph and the scenario tree (no tutorial covers them): an opening
+      balance sheet, a driver shock, what the balance check tests, and a wiring fault that fails it.
 - [ ] Live-data validation of the connectors (7.5): SEC XBRL piloted on five companies. Open here: 10-Qs
       (cash flows are year to date) and banks (their own statement template). The 10-K PDF parser's second
       issuer and a second Ind AS company are separate items below, blocked on downloads.

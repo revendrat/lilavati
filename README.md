@@ -207,7 +207,7 @@ Status legend: ✅ implemented and tested · 🟡 partial · 🗺️ planned (se
 | **Sustainable finance** | WACI, carbon-tax stress test, SLB step-up covenant | ✅ | `core/sustainability.py` |
 | | Full NGFS scenario pathways | 🟡 enum only | `schemas/sustainability.py` |
 | **Verification & data** | Z3 three-statement invariants; diagnosis of which figures could be wrong when they fail | ✅ | `core/invariants.py` |
-| | Statement DAG with driver shocks | 🟡 not yet checked against a reference (balances by an equity plug) | `core/graph.py` |
+| | Statement DAG with driver shocks | 🟡 not yet checked against a reference (hand-checked; no plug, so its balance check can fail) | `core/graph.py` |
 | | Bi-temporal DuckDB store, `CitationRef` provenance | ✅ | `core/temporal.py`, `core/provenance.py` |
 | | SEC EDGAR XBRL: filing-anchored extraction (5-company live pilot), 10-K PDF parser, Ind AS crosswalk (PDF parser and crosswalk each checked on one company) | ✅ | `connectors/` |
 | | NSE Integrated Filing (Financial) reader: an Ind AS company's exchange filing into the crosswalk, every figure cited (pilot on one filing, 26 of 28 printed items equal) | ✅ | `connectors/nse_integrated_filing.py` |
