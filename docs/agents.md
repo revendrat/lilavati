@@ -15,7 +15,7 @@ it is in the code, including what it does not do. New workflows built from these
 | `FinancialSearchAgent` | `agents/search.py` | no (its model argument is unused) | the latest 10-K filed by an as-of date; five figures with citations | point-in-time filter; notes instead of figures when data is missing | live on SEC; India not implemented |
 | `FinancialResearchAgent` | `agents/research.py` | no | dossier from one 10-K: statement model, committee, scenario tree, citations | statement and committee identities; every citation resolved against the SEC data read | piloted live on Apple, Microsoft, Walmart, Nvidia |
 | `AdversarialCommittee` | `agents/committee.py` | no | fixed rules over Beneish, Altman and identity checks; "bull", "bear" and "risk officer" are labels | balance sheet (Z3) and cash reconciliation on reported inputs | rule-based |
-| `DeepFinancialAgent` | `agents/deep.py` | no (its model argument is unused) | three fixed scenarios (or supplied ones) on the statement graph, probability-weighted | prunes scenarios with negative cash; its balance flag holds by construction (equity plug) | not reference-checked |
+| `DeepFinancialAgent` | `agents/deep.py` | no (its model argument is unused) | three fixed scenarios (or supplied ones) on the statement graph, probability-weighted | prunes scenarios with negative cash or a closing balance sheet that does not balance (the graph has no plug, so this check can fail) | not reference-checked |
 
 ```mermaid
 flowchart LR

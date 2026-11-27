@@ -14,7 +14,7 @@ Every engine has one status, and every MCP tool returns its engine's status in a
 | Engine | Pillar | Status | MCP tools | Open items | Page |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | Accounting identities, diagnosis and covenant checks (Z3) (`core/invariants.py`) | I | ✅ reference-checked | `diagnose_accounting_identities`, `find_minimum_debt_repayment`, `check_covenants_over_ranges` | the debt-repayment model assumes interest proportional to debt; ranges are independent | [invariants](invariants.md) |
-| Statement graph with driver shocks (`core/graph.py`) | I | 🟡 not reference-checked | none | balances by an equity plug, so its balance flag holds by construction | [index](index.md) |
+| Statement graph with driver shocks (`core/graph.py`) | I | 🟡 not reference-checked | none | hand-checked; no published worked example yet; debt and dividends held constant | [statement_graph](statement_graph.md) |
 | Bond price, durations, convexity, DV01 (`core/fixed_income.py`) | II | ✅ reference-checked | `analyze_bond` | maturities off the coupon grid are rounded (#27) | [fixed_income](fixed_income.md) |
 | Nelson-Siegel curve fit (`core/fixed_income.py`) | II | ✅ reference-checked | `fit_yield_curve` | clearer error for an out-of-bounds start guess (#8) | [fixed_income](fixed_income.md) |
 | Merton structural default model (`core/fixed_income.py`) | II | ✅ reference-checked | `evaluate_credit_risk_merton` | none | [fixed_income](fixed_income.md) |

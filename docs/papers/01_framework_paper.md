@@ -2,7 +2,7 @@
 
 **Author:** Revendranath Tirumalsety ([ORCID 0000-0003-0549-4022](https://orcid.org/0000-0003-0549-4022))  
 **Subject areas:** Computational finance; artificial intelligence; software for language-model agents  
-**Status:** Working paper, not peer reviewed. Version of 26 November 2026.  
+**Status:** Working paper, not peer reviewed. Version of 27 November 2026.  
 
 ---
 
@@ -246,7 +246,7 @@ validation pages (`docs/validation/`) give each check, the tolerance measured an
 | :--- | :--- | :--- | :--- |
 | Accounting | Identities, diagnosis, covenant checks (Z3) | closed forms; exhaustive search | reference-checked |
 | Accounting | Multi-year covenant paths (Z3) | exact simulation; exhaustive search | reference-checked |
-| Accounting | Statement graph with driver shocks | none | not reference-checked |
+| Accounting | Statement graph with driver shocks | hand calculations only | not reference-checked |
 | Fixed income | Bond price, durations, convexity, DV01 | QuantLib | reference-checked |
 | Fixed income | Nelson–Siegel curve | Nelson & Siegel (1987); QuantLib | reference-checked |
 | Credit | Merton structural model | Merton (1974) equations, as in Hull's textbook | reference-checked |
@@ -522,9 +522,9 @@ Seven limitations qualify the results.
 
 1. **The design rule is not enforced.** No gate yet rejects a number in an answer that no tool or source
    produced (section 3.1).
-2. **Five engines are not reference-checked:** the statement graph (it balances by an equity plug, so its
-   balance check holds by construction), purged cross-validation, the order-book snapshot,
-   Black–Litterman and hierarchical risk parity.
+2. **Five engines are not reference-checked:** the statement graph (checked against hand calculations only;
+   until 27 November 2026 it balanced by an equity plug, so its balance check could not fail), purged
+   cross-validation, the order-book snapshot, Black–Litterman and hierarchical risk parity.
 3. **The real-data pilots are small:** five 10-Ks for SEC extraction, one 10-K for the PDF parser and one
    Indian filing for the crosswalk and the NSE reader.
 4. **Identity checks verify the given numbers.** They cannot catch a wrong figure that no identity

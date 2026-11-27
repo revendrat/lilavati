@@ -79,7 +79,13 @@ right and every claim being true. These rules come from real bugs found in this 
   Test that the check fails on a perturbed input. The 10-K PDF parser and the Ind AS crosswalk had
   the same hard-coded `cash_reconciled=True`, plus equity substituted by assets minus liabilities;
   the investment committee checked 100 + flows against 100 + flows and passed a balance sheet off by
-  595,000. Grep for checks fed by their own derivation before trusting a `True`.
+  595,000. The statement graph added the balance-sheet gap to equity (an opening cash of 1e9 "balanced"
+  with a plug of 999,999,974), which also hid that its operating cash flow left out the working-capital
+  changes it reported. Grep for checks fed by their own derivation before trusting a `True`.
+- **Copy an object's whole state, not a re-listed subset of its arguments.** The scenario tree rebuilt
+  each branch from eleven named constructor arguments and dropped receivable and payable days, so every
+  branch silently used the defaults (45 and 30). Clone with a method that carries every field
+  (`StatementGraph.with_drivers`) and test that a non-default field survives the copy.
 - **A subtotal made of several lines is their sum, not the first line found.** The Ind AS map took
   "first key present" for cost of goods sold (Schedule III shows materials consumed, purchases of
   stock-in-trade and change in inventories) and for tax (current only, no deferred). Map each
@@ -395,6 +401,7 @@ paper covers cases, tracks, metrics, runs, results and error analysis.
 | :--- | :--- | :--- |
 | Provenance / bi-temporal | `core/provenance.py`, `core/temporal.py` | `CitationRef`, `SourcedValue`, `SourceStore` + `ProvenanceGate(store)` (citation resolution), DuckDB as-of queries |
 | Invariants | `core/invariants.py` | Z3 identity checks; covenant arithmetic |
+| Statement graph | `core/graph.py` | one-year projection from an opening balance sheet (must balance), no plug; `with_drivers` for scenario copies; hand-checked, not reference-checked |
 | Fixed income | `core/fixed_income.py` | bonds (price, durations, convexity, DV01), Nelson-Siegel, Merton |
 | Derivatives | `core/derivatives.py` | BSM + Greeks, CRR, implied vol, SABR (Hagan 2002), butterfly check |
 | Econometrics | `core/econometrics.py` | ADF, Engle-Granger + OU half-life, GARCH(p,q) (audited) |
@@ -480,3 +487,5 @@ Keep rules short and concrete. Remove rules that no longer apply. Add an entry b
 - 2026-11-26: `lilavati-daily` skill (one goal per day, approval model A); `next_goal.py`, `check_all.py`; TODO markers.
 - 2026-11-27: Pull request review and merge added to the daily routine (`lilavati-daily` section 1b), after
   reviewing #37 (new tests run against `main` and the PR in a scratch worktree; callers checked).
+- 2026-11-27: Statement graph without the equity plug; derived-check example and the whole-state copy rule
+  (scenario branches dropped receivable and payable days); repo map row.

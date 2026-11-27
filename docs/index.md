@@ -75,7 +75,7 @@ uv run lilavati-bench list-cases
 <!-- BEGIN generated: pillar table (scripts/render_validation_status.py) -->
 | Pillar | Capability | Engines and validation status |
 | :--- | :--- | :--- |
-| **Pillar I** | Three-Statement Modeling & Accounting Checks | Accounting identities, diagnosis and covenant checks (Z3) ✅ [reference-checked](validation/invariants.md); Statement graph with driver shocks 🟡 [not reference-checked](validation/index.md) |
+| **Pillar I** | Three-Statement Modeling & Accounting Checks | Accounting identities, diagnosis and covenant checks (Z3) ✅ [reference-checked](validation/invariants.md); Statement graph with driver shocks 🟡 [not reference-checked](validation/statement_graph.md) |
 | **Pillar II** | Fixed Income, Credit & Debt Covenants | Bond price, durations, convexity, DV01 ✅ [reference-checked](validation/fixed_income.md); Nelson-Siegel curve fit ✅ [reference-checked](validation/fixed_income.md); Merton structural default model ✅ [reference-checked](validation/fixed_income.md); Multi-period covenant paths (linked interest, cash sweep), over ranges (Z3) ✅ [reference-checked](validation/invariants.md) |
 | **Pillar III** | Financial Econometrics & Stationarity | ADF, Engle-Granger with OU half-life, GARCH(p, q) ✅ [reference-checked](validation/econometrics.md) |
 | **Pillar IV** | Financial ML (de Prado Paradigm) | Fractional differencing, minimal-d search, triple barrier ✅ [reference-checked](validation/financial_ml.md); Probabilistic and Deflated Sharpe ratios, probability of backtest overfitting ✅ [reference-checked](validation/financial_ml.md); Purged and embargoed K-fold, combinatorial purged cross-validation 🟡 [not reference-checked](validation/financial_ml.md) |
