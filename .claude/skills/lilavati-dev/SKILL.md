@@ -30,8 +30,9 @@ right and every claim being true. These rules come from real bugs found in this 
    re-running code. Never edit a quoted number by hand-calculation.
 5. Do not commit, push, tag, publish or change GitHub settings unless the maintainer asks. A "go" on
    the day's goal card (`lilavati-daily` skill) approves the commit, push, pull request and merge for
-   that goal once every check and CI pass; nothing outside the card. Conventional Commits; one
-   logical change per commit.
+   that goal once every check and CI pass; nothing outside the card. Other people's pull requests
+   are reviewed and, when they pass, merged as part of the daily routine (`lilavati-daily` section 1b,
+   including when to stop and ask). Conventional Commits; one logical change per commit.
 6. When testing old code against a new test, note that `pyproject.toml` sets
    `pythonpath = ["src"]`, which overrides `PYTHONPATH`: run the old copy with its own config
    (`pytest -c`, `--rootdir`) and confirm which module loaded via `module.__file__`.
@@ -477,3 +478,5 @@ Keep rules short and concrete. Remove rules that no longer apply. Add an entry b
 - 2026-11-26: Papers revised; rule to re-derive paper numbers when an engine changes.
 - 2026-11-26: Section 4c (revise the papers at each milestone; `scripts/check_papers_current.py`).
 - 2026-11-26: `lilavati-daily` skill (one goal per day, approval model A); `next_goal.py`, `check_all.py`; TODO markers.
+- 2026-11-27: Pull request review and merge added to the daily routine (`lilavati-daily` section 1b), after
+  reviewing #37 (new tests run against `main` and the PR in a scratch worktree; callers checked).

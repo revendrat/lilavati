@@ -105,4 +105,10 @@ Use a Conventional Commit title (`fix(forensics): clear error for zero total ass
 pull request template (formula and reference, test evidence), and keep one logical change per pull
 request. CI runs everything in sections 1 and 3 on Python 3.11 and 3.12.
 
+How it is reviewed: open pull requests are reviewed as part of the maintainers' daily routine. The
+reviewer checks out your branch, runs your new tests against `main` (a fix's tests should fail there)
+and against your branch (they should pass), runs the checks and the code that calls what you changed,
+and posts a review listing what was checked and any findings, each marked blocking or optional. A pull
+request with no blocking finding and green CI is merged; optional findings do not hold it up.
+
 Questions: open a GitHub issue. Security problems: report privately (`SECURITY.md`).
