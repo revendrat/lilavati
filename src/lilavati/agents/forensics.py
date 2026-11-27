@@ -8,6 +8,8 @@ Implements:
 
 from __future__ import annotations
 
+import math
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -169,9 +171,23 @@ class ForensicEngine:
         Calculates the Altman Z-Score for manufacturing/corporate firms:
         Z = 1.2*X1 + 1.4*X2 + 3.3*X3 + 0.6*X4 + 0.999*X5
 
-        Raises ``ValueError`` if ``total_assets`` or ``total_liabilities`` is zero, since the
-        ratios are undefined then.
+        Raises ``ValueError`` naming the input if any input is not finite (NaN or infinity), or if
+        ``total_assets``, ``total_liabilities``, ``sales`` or ``market_value_equity`` is not positive.
+        Zero total assets or total liabilities make the ratios undefined. Working capital, retained
+        earnings and EBIT may be negative.
         """
+        inputs = {
+            "working_capital": working_capital,
+            "total_assets": total_assets,
+            "retained_earnings": retained_earnings,
+            "ebit": ebit,
+            "market_value_equity": market_value_equity,
+            "total_liabilities": total_liabilities,
+            "sales": sales,
+        }
+        for name, value in inputs.items():
+            if not math.isfinite(value):
+                raise ValueError(f"{name} must be a finite number, got {value}.")
         if total_assets == 0:
             raise ValueError(
                 "total_assets must be non-zero: the Altman Z-score ratios X1, X2, X3 and X5 divide by it."
@@ -180,6 +196,9 @@ class ForensicEngine:
             raise ValueError(
                 "total_liabilities must be non-zero: the Altman Z-score ratio X4 divides by it."
             )
+        for name in ("total_assets", "total_liabilities", "sales", "market_value_equity"):
+            if inputs[name] <= 0:
+                raise ValueError(f"{name} must be positive, got {inputs[name]}.")
         x1 = working_capital / total_assets
         x2 = retained_earnings / total_assets
         x3 = ebit / total_assets

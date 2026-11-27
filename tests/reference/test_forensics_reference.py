@@ -31,9 +31,10 @@ def test_zones() -> None:
 
 
 def test_distress_zone_value() -> None:
-    z, zone = _z(market_value_equity=0.0, sales=500.0)
+    # Market equity must be positive; a negligible value leaves X4 at 0 to within 1e-11.
+    z, zone = _z(market_value_equity=1e-9, sales=500.0)
     # 0.12 + 0.28 + 0.33 + 0 + 0.4995 = 1.2295
-    assert z == pytest.approx(1.2295, abs=1e-12) and zone == "Distress"
+    assert z == pytest.approx(1.2295, abs=1e-9) and zone == "Distress"
 
 
 @pytest.mark.parametrize("field", ["total_assets", "total_liabilities"])
@@ -41,3 +42,31 @@ def test_zero_denominator_raises_value_error_naming_the_input(field: str) -> Non
     # A zero denominator used to surface as a bare ZeroDivisionError with no hint which input was bad.
     with pytest.raises(ValueError, match=field):
         _z(**{field: 0.0})
+
+
+@pytest.mark.parametrize("field", ["working_capital", "total_assets", "retained_earnings", "ebit",
+                                   "market_value_equity", "total_liabilities", "sales"])
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), float("-inf")])
+def test_non_finite_input_raises_value_error_naming_the_input(field: str, bad: float) -> None:
+    # A NaN used to give a NaN score classed "Safe": every zone comparison with NaN is false.
+    with pytest.raises(ValueError, match=field):
+        _z(**{field: bad})
+
+
+@pytest.mark.parametrize("field", ["total_assets", "total_liabilities", "sales", "market_value_equity"])
+def test_negative_input_raises_value_error_naming_the_input(field: str) -> None:
+    with pytest.raises(ValueError, match=field):
+        _z(**{field: -1.0})
+
+
+def test_zero_sales_and_zero_market_equity_are_rejected() -> None:
+    with pytest.raises(ValueError, match="sales"):
+        _z(sales=0.0)
+    with pytest.raises(ValueError, match="market_value_equity"):
+        _z(market_value_equity=0.0)
+
+
+@pytest.mark.parametrize("field", ["working_capital", "retained_earnings", "ebit"])
+def test_negative_working_capital_retained_earnings_and_ebit_are_allowed(field: str) -> None:
+    z, zone = _z(**{field: -100.0})
+    assert z < 2.8288 and zone in {"Distress", "Grey", "Safe"}

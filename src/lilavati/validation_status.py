@@ -132,7 +132,7 @@ ENGINES: tuple[Engine, ...] = (
            readme_row="WACI, carbon-tax stress test"),
     Engine("forensics", "Beneish M-score, Altman Z-score", "Filings & agents", "agents/forensics.py",
            "reference-checked", "validation/forensics.md", ("compute_forensic_beneish_m_score",),
-           open_items="Altman accepts missing and negative inputs (#26); Beneish flags fast growers"),
+           open_items="Beneish flags fast growers"),
     Engine("committee", "Rule-based investment committee", "Filings & agents", "agents/committee.py",
            "rule-based", "validation/forensics.md", ("evaluate_investment_committee_memo",)),
     Engine("sec_xbrl", "SEC XBRL filing-anchored extraction and three-statement model", "Filings & agents",
