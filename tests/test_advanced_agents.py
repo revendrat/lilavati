@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from datetime import date
 
+import pytest
+
 from lilavati.agents.deep import DeepFinancialAgent
 from lilavati.agents.research import FinancialResearchAgent
 from lilavati.agents.search import FinancialSearchAgent
@@ -69,29 +71,49 @@ def test_financial_search_agent_never_invents_figures(monkeypatch) -> None:
 def test_deep_financial_agent_scenarios() -> None:
     deep_agent = DeepFinancialAgent()
 
-    graph = StatementGraph(
-        revenue=1000.0,
-        gross_margin=0.40,
-        sga_ratio=0.15,
-        tax_rate=0.20,
-        interest_rate=0.05,
-        capex=50.0,
-        depreciation=40.0,
-        cash_start=100.0,
-        initial_debt=200.0,
-        initial_common_equity=300.0,
-        initial_net_ppe=500.0,
-    )
-
     tree = deep_agent.analyze_deep_scenarios(
         query="Evaluate 3-year cash generation trajectory",
-        baseline_graph=graph,
+        baseline_graph=_scenario_baseline(),
     )
 
     assert tree.target_query == "Evaluate 3-year cash generation trajectory"
     assert len(tree.scenario_branches) == 3
+    assert all(b.smt_invariant_verified and not b.is_pruned for b in tree.scenario_branches)
     assert tree.probability_weighted_net_income > 0.0
     assert len(tree.deep_reasoning_steps) >= 3
+
+
+def _scenario_baseline(graph_type: type[StatementGraph] = StatementGraph) -> StatementGraph:
+    # Opening balance sheet: 100 + 120 + 500 + 30 = 750 = (60 + 200 + 40) + (300 + 150).
+    return graph_type(
+        revenue=1000.0, gross_margin=0.40, sga_ratio=0.15, tax_rate=0.25, interest_rate=0.05, capex=50.0,
+        depreciation=40.0, cash_start=100.0, initial_debt=200.0, initial_common_equity=300.0,
+        initial_net_ppe=500.0, opening_receivables=120.0, opening_payables=60.0, opening_retained_earnings=150.0,
+        dso_days=36.5, dpo_days=73.0, other_assets=30.0, other_liabilities=40.0)
+
+
+def test_scenarios_keep_every_baseline_driver() -> None:
+    # Each branch used to be rebuilt without receivable and payable days (always 45 and 30).
+    # Base branch, revenue 1050: COGS 630, EBIT 420 - 157.5 = 262.5, pre-tax 252.5, NI 189.375;
+    # receivables 1050 / 365 x 36.5 = 105 (down 15), payables 630 / 365 x 73 = 126 (up 66);
+    # CFO 189.375 + 40 + 15 + 66 = 310.375; cash 100 + 310.375 - 50 = 360.375.
+    tree = DeepFinancialAgent().analyze_deep_scenarios("q", _scenario_baseline())
+    base = next(b for b in tree.scenario_branches if b.branch_name.startswith("Base"))
+    assert base.projected_net_income == pytest.approx(189.375)
+    assert base.projected_ending_cash == pytest.approx(360.375)
+
+
+def test_a_branch_whose_balance_sheet_does_not_balance_is_pruned() -> None:
+    # The pruning rule could never fire while the graph plugged equity.
+    class ForgetsPayables(StatementGraph):
+        def _operating_cash_flow(self, net_income: float, depreciation: float, change_receivables: float,
+                                 change_payables: float) -> float:
+            return net_income + depreciation - change_receivables
+
+    tree = DeepFinancialAgent().analyze_deep_scenarios("q", _scenario_baseline(ForgetsPayables))
+    assert all(b.is_pruned and not b.smt_invariant_verified for b in tree.scenario_branches)
+    assert all("does not balance" in (b.prune_reason or "") for b in tree.scenario_branches)
+    assert tree.pruned_branches_count == 3
 
 
 def _research_agent(drop: tuple[str, ...] = (), company: tuple[str, str] = ("aapl", "0000320193")):
@@ -143,6 +165,30 @@ def test_financial_research_agent_uses_the_filing_not_assumptions() -> None:
     assert d.climate_risk_summary is None  # no emissions supplied: nothing invented
     assert any("public float" in a for a in d.assumed_inputs) and any("scenario" in a for a in d.assumed_inputs)
     assert d.scenario_analysis.probability_weighted_net_income > 0.0
+
+
+@pytest.mark.parametrize(("company", "symbol", "as_of"), [
+    (("aapl", "0000320193"), "AAPL", date(2026, 11, 3)),
+    (("msft", "0000789019"), "MSFT", date(2026, 11, 24)),
+    (("nvda", "0001045810"), "NVDA", date(2026, 11, 24)),
+])
+def test_research_scenarios_open_at_the_filing_balance_sheet(
+        company: tuple[str, str], symbol: str, as_of: date) -> None:
+    # FY2026 10-Ks (fixtures, USD millions). Receivable and payable days are the filing year's, so the
+    # Base branch (revenue and COGS x 1.05) grows receivables and payables by 5%: ending cash = cash + NI
+    # + depreciation - capex + 0.05 x (payables - receivables). Apple: 36,305 + 137,760.54 + 13,423
+    # - 9,041 + 0.05 x (82,252 - 43,817) = 180,369.29.
+    d = _research_agent(company=company).conduct_deep_research(symbol=symbol, as_of_date=as_of)
+    i = d.inputs_usd_millions
+    base = next(b for b in d.scenario_analysis.scenario_branches if b.branch_name.startswith("Base"))
+    expected = (i["cash"] + base.projected_net_income + i["depreciation"] - i["capital_expenditure"]
+                + 0.05 * (i["accounts_payable"] - i["accounts_receivable"]))
+    assert base.projected_ending_cash == pytest.approx(expected, rel=1e-12)
+    if symbol == "AAPL":
+        assert base.projected_ending_cash == pytest.approx(180_369.29, abs=0.01)
+    assert all(b.smt_invariant_verified and not b.is_pruned for b in d.scenario_analysis.scenario_branches)
+    assert d.derived_inputs["scenario_dso_days"].startswith("accounts_receivable / revenue")
+    assert not any("exceed liabilities plus equity" in a for a in d.assumed_inputs)  # all three balance
 
 
 def test_financial_research_agent_refuses_instead_of_filling(monkeypatch) -> None:

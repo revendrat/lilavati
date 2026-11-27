@@ -85,14 +85,16 @@ def main() -> None:
     console.print(table)
 
     scenarios = Table(title="Scenario tree (assumed multipliers; graph calibrated from the filing)")
-    for col in ("Scenario", "Probability", "Revenue (USD m)", "Net income (USD m)"):
+    for col in ("Scenario", "Probability", "Revenue (USD m)", "Net income (USD m)", "Ending cash (USD m)", "Balances"):
         scenarios.add_column(col, justify="right" if col != "Scenario" else "left")
     for b in d.scenario_analysis.scenario_branches:
         scenarios.add_row(b.branch_name, f"{b.probability_weight:.0%}", f"{b.projected_revenue:,.0f}",
-                          f"{b.projected_net_income:,.0f}")
+                          f"{b.projected_net_income:,.0f}", f"{b.projected_ending_cash:,.0f}",
+                          "yes" if b.smt_invariant_verified else "NO")
     console.print(scenarios)
-    console.print("[dim]The scenario graph balances by an equity plug, so its balance flag is not an "
-                  "independent check (statement graph not yet audited).[/dim]")
+    console.print("[dim]The scenario graph opens at the filing's balance sheet and rolls every line forward "
+                  "(no plug), so its balance check tests the roll-forward, not the scenario multipliers "
+                  "(statement graph not yet checked against a reference).[/dim]")
 
     console.print(f"\n[bold]Thesis:[/bold] {d.executive_thesis}\n")
     console.print("[bold]Inputs not taken from the filing:[/bold]")

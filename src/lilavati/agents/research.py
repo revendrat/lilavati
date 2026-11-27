@@ -118,6 +118,58 @@ def _public_float(facts: dict[str, Any], filing: FilingRef) -> SourcedValue | No
     return None
 
 
+def scenario_graph_from_filing(model: SourcedThreeStatementModel, v: dict[str, float], assumed: list[str],
+                               derived: dict[str, str]) -> StatementGraph:
+    """
+    The one-year scenario graph (USD millions), opening at the filing's closing balance sheet.
+
+    Drivers from the filing year: gross margin, operating-expense ratio, effective tax rate (income tax /
+    pre-tax income), interest rate (interest expense / total debt; 0 and listed in ``assumed`` when no
+    interest line is reported), capex and depreciation, receivable days (receivables / revenue × 365) and
+    payable days (payables / cost of revenue × 365), so revenue held flat leaves working capital flat.
+    Opening lines the graph does not model are held constant: other assets (total assets − cash −
+    receivables − net PP&E), other liabilities (total liabilities − payables − debt) and equity other than
+    retained earnings (total equity − retained earnings). Each derivation is recorded in ``derived``. If
+    the filing's assets differ from its liabilities plus equity (temporary equity, for example), the
+    difference is held as an other liability and listed in ``assumed``.
+    """
+    m = 1e6
+    inc, bs = model.statement_model.income_statement, model.statement_model.balance_sheet
+    interest_rate = 0.0
+    if "interest_expense" in v and bs.total_debt:
+        interest_rate = v["interest_expense"] / bs.total_debt
+    else:
+        assumed.append("interest rate 0 in the scenario graph: the filing reports no interest expense line")
+    if "accounts_payable" in model.not_reported:
+        assumed.append("payable days 0 in the scenario graph: the filing reports no payables line "
+                       "(payables are in other liabilities, held constant)")
+    gap = bs.total_assets - bs.total_liabilities - bs.total_equity
+    if abs(gap) > 0.5:
+        assumed.append(f"scenario graph: the filing's total assets exceed liabilities plus equity by "
+                       f"{gap / m:,.0f} (USD millions; temporary equity, for example), held as an other liability")
+    derived.update({
+        "scenario_dso_days": "accounts_receivable / revenue x 365 (filing year)",
+        "scenario_dpo_days": "accounts_payable / cost_of_revenue x 365 (filing year)",
+        "scenario_other_assets": "total_assets - cash - accounts_receivable - net_ppe (held constant)",
+        "scenario_other_liabilities": "total_liabilities - accounts_payable - total_debt "
+                                      "(+ total_assets - total_liabilities - total_equity if not zero; held constant)",
+        "scenario_equity_other_than_retained_earnings": "total_equity - retained_earnings (held constant)",
+    })
+    return StatementGraph(
+        revenue=inc.revenue / m, gross_margin=inc.gross_profit / inc.revenue,
+        sga_ratio=(inc.gross_profit - inc.operating_income) / inc.revenue,
+        tax_rate=v["income_tax"] / v["pretax_income"], interest_rate=interest_rate,
+        capex=v["capital_expenditure"] / m, depreciation=v["depreciation"] / m,
+        cash_start=bs.cash_and_equivalents / m, initial_debt=bs.total_debt / m,
+        initial_common_equity=(bs.total_equity - bs.retained_earnings) / m, initial_net_ppe=bs.net_ppe / m,
+        opening_receivables=bs.accounts_receivable / m, opening_payables=bs.accounts_payable / m,
+        opening_retained_earnings=bs.retained_earnings / m,
+        dso_days=bs.accounts_receivable / inc.revenue * 365.0, dpo_days=bs.accounts_payable / inc.cogs * 365.0,
+        other_assets=(bs.total_assets - bs.cash_and_equivalents - bs.accounts_receivable - bs.net_ppe) / m,
+        other_liabilities=(bs.total_liabilities - bs.accounts_payable - bs.total_debt + gap) / m,
+    )
+
+
 class FinancialResearchAgent:
     """Filing → statement model → committee → scenarios → citation check, for one company and date."""
 
@@ -221,22 +273,9 @@ class FinancialResearchAgent:
             fx_effect_on_cash_t=v.get("fx_effect_on_cash", 0.0),
         )
 
-        # Scenario baseline calibrated from the filing (USD millions).
         m = 1e6
         inc = sm.income_statement
-        interest_rate = 0.0
-        if "interest_expense" in v and sm.balance_sheet.total_debt:
-            interest_rate = v["interest_expense"] / sm.balance_sheet.total_debt
-        else:
-            assumed.append("interest rate 0 in the scenario graph: the filing reports no interest expense line")
-        graph = StatementGraph(
-            revenue=inc.revenue / m, gross_margin=inc.gross_profit / inc.revenue,
-            sga_ratio=(inc.gross_profit - inc.operating_income) / inc.revenue,
-            tax_rate=v["income_tax"] / v["pretax_income"], interest_rate=interest_rate,
-            capex=v["capital_expenditure"] / m, depreciation=v["depreciation"] / m,
-            cash_start=sm.balance_sheet.cash_and_equivalents / m, initial_debt=sm.balance_sheet.total_debt / m,
-            initial_common_equity=sm.balance_sheet.common_equity / m, initial_net_ppe=sm.balance_sheet.net_ppe / m,
-        )
+        graph = scenario_graph_from_filing(model, v, assumed, derived)
         tree = self.deep_agent.analyze_deep_scenarios(
             query=f"One-year scenarios for {symbol} from its FY{fy} 10-K", baseline_graph=graph)
 

@@ -3,9 +3,11 @@ Scenario tree on the statement graph: three fixed scenarios (or supplied ones), 
 
 No language model is called (the client argument is accepted for a common interface and unused); the
 ``deep_reasoning_steps`` are fixed descriptions of the steps, not text derived from the question. Each
-scenario scales revenue and shifts the gross margin, recomputes the statements with ``StatementGraph``,
-and is pruned if it ends with negative cash. The identity check on each branch is not independent: the
-statement graph balances by an equity plug, so it holds by construction (statement graph not yet audited).
+scenario scales revenue and shifts the gross margin on a copy of the baseline graph (every other driver,
+including receivable and payable days, carried over), recomputes the statements with ``StatementGraph``,
+and is pruned if it ends with negative cash or its closing balance sheet does not balance. The balance
+check tests the graph's roll-forward (no plug), not the scenario's assumptions; the statement graph is
+not yet checked against a reference.
 """
 
 from __future__ import annotations
@@ -15,14 +17,13 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 
 from lilavati.core.graph import StatementGraph
-from lilavati.core.invariants import SuvarnaEngine
 from lilavati.llm.client import BaseLLMClient, UniversalLLMClient
 from lilavati.llm.providers import INSTITUTIONAL_MODEL_PRESETS, ModelSpec
 from lilavati.schemas.statements import ThreeStatementModel
 
 
 class ScenarioBranch(BaseModel):
-    """An explored financial scenario branch evaluated through formal solvers."""
+    """One scenario branch: its drivers, projected figures and whether its closing balance sheet balances."""
 
     model_config = ConfigDict(frozen=True)
 
@@ -53,9 +54,8 @@ class DeepReasoningTree(BaseModel):
 
 class DeepFinancialAgent:
     """
-    Deep Financial Thinker agent.
-    Decomposes an open-ended valuation or credit inquiry into a tree of formal hypotheses,
-    evaluating each branch through deterministic reactive DAGs and SMT solver verification.
+    Scenario-tree agent: runs fixed (or supplied) revenue and margin scenarios through the statement
+    graph and weights the results by probability. No language model is called.
     """
 
     def __init__(
@@ -76,7 +76,7 @@ class DeepFinancialAgent:
         Explores multi-branch financial hypotheses:
         1. Formulates Bull, Base, and Stressed Bear branches.
         2. Recomputes statements reactively through StatementGraph.
-        3. Checks accounting identities on the given numbers via SuvarnaEngine (Z3).
+        3. Checks each branch's closing balance sheet and cash roll-forward (SuvarnaEngine, Z3).
         4. Prunes unviable branches that produce cash shortfalls without liquidity.
         5. Computes probability-weighted expected financial parameters.
         """
@@ -121,35 +121,11 @@ class DeepFinancialAgent:
             new_rev = baseline_rev * float(sc["revenue_mult"])
             new_gm = baseline_gm + float(sc["margin_bump"])
 
-            # Clone graph and set drivers
-            graph_clone = StatementGraph(
-                revenue=new_rev,
-                gross_margin=new_gm,
-                sga_ratio=baseline_graph.drivers["sga_ratio"],
-                tax_rate=baseline_graph.drivers["tax_rate"],
-                interest_rate=baseline_graph.drivers["interest_rate"],
-                capex=baseline_graph.drivers["capex"],
-                depreciation=baseline_graph.drivers["depreciation"],
-                cash_start=baseline_graph.drivers["cash_start"],
-                initial_debt=baseline_graph.drivers["total_debt"],
-                initial_common_equity=baseline_graph.drivers["common_equity"],
-                initial_net_ppe=baseline_graph.drivers["net_ppe_start"],
-            )
-
-            model: ThreeStatementModel = graph_clone.compute()
-
-            # Formal Invariant Verification
-            check = SuvarnaEngine.verify_three_statement_invariants(
-                total_assets=model.balance_sheet.total_assets,
-                total_liabilities=model.balance_sheet.total_liabilities,
-                shareholders_equity=model.balance_sheet.total_equity,
-                net_income=model.income_statement.net_income,
-                cash_start=graph_clone.drivers["cash_start"],
-                cash_end=model.balance_sheet.cash_and_equivalents,
-                cfo=model.cash_flow_statement.cfo,
-                cfi=model.cash_flow_statement.cfi,
-                cff=model.cash_flow_statement.cff,
-            )
+            # A copy of the baseline with every other driver carried over.
+            model: ThreeStatementModel = baseline_graph.with_drivers(
+                revenue=new_rev, gross_margin=new_gm).compute()
+            balanced = model.is_balanced and model.cash_reconciled
+            bs = model.balance_sheet
 
             is_pruned = False
             prune_reason = None
@@ -159,9 +135,12 @@ class DeepFinancialAgent:
                 is_pruned = True
                 prune_reason = "Insolvency: Ending cash dropped below $0 with unhedged working capital deficit."
                 pruned_count += 1
-            elif not check.is_valid:
+            elif not balanced:
                 is_pruned = True
-                prune_reason = f"SMT Invariant Breach: {'; '.join(check.violations)}"
+                prune_reason = (
+                    "Closing balance sheet does not balance: assets "
+                    f"{bs.total_assets} != liabilities {bs.total_liabilities} + equity {bs.total_equity}"
+                )
                 pruned_count += 1
             else:
                 weighted_ni += prob * model.income_statement.net_income
@@ -179,14 +158,14 @@ class DeepFinancialAgent:
                     projected_ebit=model.income_statement.operating_income,
                     projected_net_income=model.income_statement.net_income,
                     projected_ending_cash=model.balance_sheet.cash_and_equivalents,
-                    smt_invariant_verified=check.is_valid,
+                    smt_invariant_verified=balanced,
                     is_pruned=is_pruned,
                     prune_reason=prune_reason,
                 )
             )
 
         reasoning_steps.append(
-            f"Step 3: Evaluated {len(branches)} hypothesis branches through Z3 SMT formal verification."
+            f"Step 3: Checked the closing balance sheet and cash roll-forward of {len(branches)} branches (Z3)."
         )
         reasoning_steps.append(
             f"Step 4: Solved expected net income ${weighted_ni:,.1f}M across active branches (pruned {pruned_count})."
